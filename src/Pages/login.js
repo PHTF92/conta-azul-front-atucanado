@@ -1,4 +1,5 @@
 import React from 'react';
+import { encode } from "base-64";
 import Header from '../components/header';
 import './login.css';
 import abgg from '../imgs/abgg.png';
@@ -16,13 +17,23 @@ class Login extends React.Component {
 
   async submitFetch() {
     const { email, senha } = this.state;
+    const username = 'codenation'
+    const password = '123'
+    const encoded = encode(username + ":" + password);
+    const formData = new FormData();
+    formData.append('grant_type', 'password');
+    formData.append('username', email);
+    formData.append('password', senha);
       const requestOptions = {
         method: 'POST',
-        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-        body: `grant_type=password&username=${ email }&password=${ senha }&scope=password` +
-          `&client_id=codenation&client_secret=123`,
+        headers: new Header({
+          'Content-Type': 'multipart/form-data',
+          'Authorization': "Basic Y29kZW5hdGlvbjoxMjM="
+        }),
+        body: formData,
       }
-      const request = await fetch('http://localhost:8080/oauth/token', requestOptions);
+      // https://cors-anywhere.herokuapp.com/https://codenation-central-de-erros-ca.herokuapp.com/
+      const request = await fetch('https://cors-anywhere.herokuapp.com/https://codenation-central-de-erros-ca.herokuapp.com/', requestOptions);
       const response = await request.json();
       console.log(response);
       return response;
