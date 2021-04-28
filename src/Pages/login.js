@@ -33,7 +33,7 @@ class Login extends React.Component {
         body: formData,
       }
       // https://cors-anywhere.herokuapp.com/https://codenation-central-de-erros-ca.herokuapp.com/
-      const request = await fetch('https://cors-anywhere.herokuapp.com/https://codenation-central-de-erros-ca.herokuapp.com/', requestOptions);
+      const request = await fetch('https://cors-anywhere.herokuapp.com/https://codenation-central-de-erros-ca.herokuapp.com/auth/token', requestOptions);
       const response = await request.json();
       console.log(response);
       return response;
