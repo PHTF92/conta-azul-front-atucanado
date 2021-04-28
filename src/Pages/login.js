@@ -9,21 +9,21 @@ class Login extends React.Component {
     super(props);
     this.state = {
       email: '',
-      senha: ''
+      password: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.submitFetch = this.submitFetch.bind(this);
   }
 
   async submitFetch() {
-    const { email, senha } = this.state;
+    const { email, password } = this.state;
     const username = 'codenation'
     const password = '123'
     const encoded = encode(username + ":" + password);
     const formData = new FormData();
     formData.append('grant_type', 'password');
     formData.append('username', email);
-    formData.append('password', senha);
+    formData.append('password', password);
       const requestOptions = {
         method: 'POST',
         headers: new Header({
