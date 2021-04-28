@@ -36,8 +36,8 @@ class Login extends React.Component {
       const request = await fetch('https://cors-anywhere.herokuapp.com/https://codenation-central-de-erros-ca.herokuapp.com/auth/token', requestOptions);
       const response = await request.json();
       console.log(response);
+      console.log("aaaaaa")
       return response;
-    
   }
 
   handleChange({ target }) {
