@@ -18,8 +18,8 @@ class Login extends React.Component {
   async submitFetch() {
     const { email, password } = this.state;
     const username = 'codenation'
-    const password = '123'
-    const encoded = encode(username + ":" + password);
+    const clientPassword = '123'
+    const encoded = encode(username + ":" + clientPassword);
     const formData = new FormData();
     formData.append('grant_type', 'password');
     formData.append('username', email);
@@ -33,7 +33,7 @@ class Login extends React.Component {
         body: formData,
       }
       // https://cors-anywhere.herokuapp.com/https://codenation-central-de-erros-ca.herokuapp.com/
-      const request = await fetch('https://cors-anywhere.herokuapp.com/https://codenation-central-de-erros-ca.herokuapp.com/auth/token', requestOptions);
+      const request = await fetch('http://localhost:8080/auth/token', requestOptions);
       const response = await request.json();
       console.log(response);
       return response;
