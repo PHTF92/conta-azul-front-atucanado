@@ -1,6 +1,7 @@
 import React from 'react';
 import { encode } from "base-64";
 import Header from '../components/header';
+import { Redirect } from 'react-router-dom';
 import './login.css';
 import abgg from '../imgs/abgg.png';
 
@@ -9,36 +10,42 @@ class Login extends React.Component {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      logado: false
+
     }
     this.handleChange = this.handleChange.bind(this);
     this.submitFetch = this.submitFetch.bind(this);
+    this.tokenInLocalStorage = this.tokenInLocalStorage.bind(this);
+  }
+  tokenInLocalStorage(response) {
+    localStorage.setItem("token", response.access_token)
+    const tokenInLocal = localStorage.getItem('token');
+    if(tokenInLocal && tokenInLocal !== null || tokenInLocal !== undefined) {
+      this.setState({ logado: true });
+    }
   }
 
   async submitFetch() {
     const { email, password } = this.state;
-    const username = 'codenation'
-    const clientPassword = '123'
-    const encoded = encode(username + ":" + clientPassword);
-    const formData = new FormData();
-    formData.append('grant_type', 'password');
-    formData.append('username', email);
-    formData.append('password', password);
-      const requestOptions = {
-        method: 'POST',
-        headers: new Header({
-          'Content-Type': 'multipart/form-data',
-          'Authorization': "Basic Y29kZW5hdGlvbjoxMjM="
-        }),
-        body: formData,
-      }
-      // https://cors-anywhere.herokuapp.com/https://codenation-central-de-erros-ca.herokuapp.com/
-      const request = await fetch('https://cors-anywhere.herokuapp.com/https://codenation-central-de-erros-ca.herokuapp.com/auth/token', requestOptions);
-      const response = await request.json();
-      console.log(response);
-      console.log("aaaaaa")
-      return response;
+    const authHeaders = new Headers();
+        authHeaders.append("Authorization", "Basic Y29kZW5hdGlvbjoxMjM=");
+        const formdata = new FormData();
+        formdata.append("username", email);
+        formdata.append("password", password);
+        formdata.append("grant_type", "password");
+        const requestOptions = {
+          method: 'POST',
+          headers: authHeaders,
+          body: formdata,
+          redirect: 'follow'
+        };
+        fetch("https://codenation-central-de-erros-ca.herokuapp.com/oauth/token", requestOptions)
+          .then(response => response.json())
+          .then(response => this.tokenInLocalStorage(response))
+          .catch(err => console.error(err));
   }
+
 
   handleChange({ target }) {
     const { name, value } = target;
@@ -46,7 +53,7 @@ class Login extends React.Component {
   }
 
   render(){
-    const { email, password } = this.state;
+    const { email, password, logado } = this.state;
     return(
       <div className="bodyF">
         <Header />
@@ -78,6 +85,7 @@ class Login extends React.Component {
             >
               Entrar
             </button>
+            { logado && <Redirect to="/allLog" />}
             <a href="/cadastro">Não tem uma conta? Experimente grátis!</a>
         </div>
       </div>
