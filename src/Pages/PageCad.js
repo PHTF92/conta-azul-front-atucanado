@@ -33,7 +33,6 @@ class Cadastro extends React.Component {
         'password': this.state.senha,
       })
     }
-
     return fetch('https://codenation-central-de-erros-ca.herokuapp.com/users', myInit)
     .then((response) => {
       console.log(response);

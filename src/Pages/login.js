@@ -1,4 +1,5 @@
 import React from 'react';
+import { encode } from "base-64";
 import Header from '../components/header';
 import { Redirect } from 'react-router-dom';
 import './login.css';
@@ -11,6 +12,7 @@ class Login extends React.Component {
       email: '',
       password: '',
       logado: false
+
     }
     this.handleChange = this.handleChange.bind(this);
     this.submitFetch = this.submitFetch.bind(this);
